@@ -15,19 +15,19 @@
 #define Pb (long long)892783079
 #define bAJO (long long)2147483647
 
-long long **asignar_matriz(int n, int m);                                              // Reservar la memoria y crear una matriz nula
-void llenar_matriz(long long **matriz, int filas, int columnas);                       // Llenar la matriz nula con valores al azar utilizando la funcion rand()
-void imprimir_matriz(long long **array, int filas, int columnas);                      // Funcion que imprime la matriz
-void Triangular_SUP(long long **matriz_vellda, int filas, int columnas);               // Matriz Triangular superior
-void Triangular_INF(long long **matriz, int filas, int columnas);                      // Matriz Triangular inferior
-void Eliminacion_Gaussiana(long long **matriz, int filas, int columnas);               // Eliminacion Gaussiana completa
-void Matriz_inversa(long long **matriz, int filas, int columnas);                      // Matriz inversa
-void eye(long long **matriz, int fila, int columnas);                                  // Matriz identidad
-void menu();                                                                           // Menu para desplazarse entre las funciones del programa
-void cambiar_linea(long long **matriz, int dim, int linea, long long valor);           // Toma un fila de la matriz y la amplifica por un valor dado
-void resta_lineas(long long **matriz, int dim, int minu, int sustra, long long valor); // Resta dos filas
+long long **asignar_matriz(int n, int m);                                                // Reservar la memoria y crear una matriz nula
+void llenar_matriz(long long **matriz, int filas, int columnas);                         // Llenar la matriz nula con valores al azar utilizando la funcion rand()
+void imprimir_matriz(long long **array, int filas, int columnas);                        // Funcion que imprime la matriz
+void Triangular_SUP(long long **matriz_vellda, int filas, int columnas);                 // Matriz Triangular superior
+void Triangular_INF(long long **matriz, int filas, int columnas);                        // Matriz Triangular inferior
+void Eliminacion_Gaussiana(long long **matriz, int filas, int columnas);                 // Eliminacion Gaussiana completa
+void Matriz_inversa(long long **matriz, long long **identidad, int filas, int columnas); // Matriz inversa
+void eye(long long **matriz, int fila, int columnas);                                    // Matriz identidad
+void menu();                                                                             // Menu para desplazarse entre las funciones del programa
+void cambiar_linea(long long **matriz, int dim, int linea, long long valor);             // Toma un fila de la matriz y la amplifica por un valor dado
+void resta_lineas(long long **matriz, int dim, int minu, int sustra, long long valor);   // Resta dos filas
 
-// ###########Funciones PROFE#######//
+// ########### Funciones Profesor #######//
 long long MultP(long long a, long long b);
 long long RestaP(long long a, long long b);
 long long SumaP(long long a, long long b);
@@ -43,11 +43,10 @@ int main()
 
 void menu()
 {
-    int opcion, filas, columnas;
+    int opcion, filas, columnas, el;
     long long **matriz;
+    long long **identidad;
     clock_t tiempo1, tiempo2;
-
-    // generar matriz
 
     printf("\nEscoga la cantidad de filas de la matriz: ");
     scanf("%i", &filas);
@@ -64,44 +63,109 @@ void menu()
         printf("\n2) Triangular Superior. ");
         printf("\n3) Triangular Inferior ");
         printf("\n4) Matriz Inversa. ");
-        printf("\n5) Llenar matriz con valores. ");
+        printf("\n5) Crear matriz con nuevos valores.  ");
         printf("\n Opcion: (Presione 0 para salir) ");
         scanf("%i", &opcion);
 
         switch (opcion)
         {
         case 1:
+            printf("\nDesea ver la matriz ?");
+            printf("\n1) Si ");
+            printf("\n2) No \n");
+            scanf("%i", &el);
+            if (el == 1)
+            {
+                printf("\nMatriz original : \n");
+                imprimir_matriz(matriz, filas, columnas);
+            }
             tiempo1 = clock();
             Eliminacion_Gaussiana(matriz, filas, columnas);
-            printf("\nAca esta wea ya termino pero le cuesta calcular el tiempo........");
+            tiempo2 = clock();
+            if (el == 1)
+            {
+                printf("\n\nMatriz con Eliminacion Gaussiana : \n");
+                imprimir_matriz(matriz, filas, columnas);
+            }
+            printf("\nPrograma terminado, la ejecucion duro : %f", ((double)tiempo2 - (double)tiempo1) / ((double)CLOCKS_PER_SEC));
+            break;
+        case 2:
+            printf("\nDesea ver la matriz ?");
+            printf("\n1) Si ");
+            printf("\n2) No \n");
+            scanf("%i", &el);
+            if (el == 1)
+            {
+                printf("\n\nMatriz original : \n");
+                imprimir_matriz(matriz, filas, columnas);
+            }
+            tiempo1 = clock();
+            Triangular_SUP(matriz, filas, columnas);
+            tiempo2 = clock();
+            if (el == 1)
+            {
+                printf("\n\nMatriz Triangular Superior: \n");
+                imprimir_matriz(matriz, filas, columnas);
+            }
+            printf("\nPrograma terminado, la ejecucion duro : %f", ((double)tiempo2 - (double)tiempo1) / ((double)CLOCKS_PER_SEC));
+            break;
+        case 3:
+            printf("\nDesea ver la matriz ?");
+            printf("\n1) Si ");
+            printf("\n2) No \n");
+            scanf("%i", &el);
+            if (el == 1)
+            {
+                printf("\nMatriz original : \n");
+                imprimir_matriz(matriz, filas, columnas);
+            }
+            tiempo1 = clock();
+            Triangular_INF(matriz, filas, columnas);
+            tiempo2 = clock();
+            if (el == 1)
+            {
+                printf("\n\nMatriz Triangular Inferior : \n");
+                imprimir_matriz(matriz, filas, columnas);
+            }
+            printf("\nPrograma terminado, la ejecucion duro : %f", ((double)tiempo2 - (double)tiempo1) / ((double)CLOCKS_PER_SEC));
+            break;
+        case 4:
+            identidad = asignar_matriz(filas, columnas);
+            eye(identidad, filas, columnas);
+            printf("\nDesea ver la matriz ?");
+            printf("\n1) Si ");
+            printf("\n2) No \n");
+            scanf("%i", &el);
+            if (el == 1)
+            {
+                printf("\nMatriz original : \n");
+                imprimir_matriz(matriz, filas, columnas);
+            }
+            tiempo1 = clock();
+            Matriz_inversa(matriz, identidad, filas, columnas);
+            tiempo2 = clock();
+            matriz = identidad;
+            if (el == 1)
+            {
+                printf("\n\nMatriz Inversa : \n");
+                imprimir_matriz(matriz, filas, columnas);
+            }
+            printf("\nPrograma terminado, la ejecucion duro : %f", ((double)tiempo2 - (double)tiempo1) / ((double)CLOCKS_PER_SEC));
+
+            break;
+        case 5:
             for (int i = 0; i < columnas; i++)
             {
                 free(matriz[i]);
             }
             free(matriz);
-            tiempo2 = clock();
-            printf("\nPrograma terminado, la ejecucion duro : %f", ((double)tiempo2 - (double)tiempo1) / ((double)CLOCKS_PER_SEC));
-
-            break;
-        case 2:
-            tiempo1 = clock();
-            Triangular_SUP(matriz, filas, columnas);
-            tiempo2 = clock();
-            printf("Programa terminado, la ejecucion duro : %f", ((double)tiempo2 - (double)tiempo1) / ((double)CLOCKS_PER_SEC));
-            // free(matriz);
-            break;
-        case 3:
-            tiempo1 = clock();
-            Triangular_INF(matriz, filas, columnas);
-            tiempo2 = clock();
-            printf("Programa terminado, la ejecucion duro : %f", ((double)tiempo2 - (double)tiempo1) / ((double)CLOCKS_PER_SEC));
-            // free(matriz);
-            break;
-        case 4:
-            tiempo1 = clock();
-            Matriz_inversa(matriz, filas, columnas);
-            tiempo2 = clock();
-            printf("Programa terminado, la ejecucion duro : %f", ((double)tiempo2 - (double)tiempo1) / ((double)CLOCKS_PER_SEC));
+            printf("\nGenerando una nueva matriz: ");
+            printf("\nEscoga la cantidad de filas de la matriz: ");
+            scanf("%i", &filas);
+            printf("\nEscoga la cantidad de columnas de la matriz: ");
+            scanf("%i", &columnas);
+            matriz = asignar_matriz(filas, columnas);
+            llenar_matriz(matriz, filas, columnas);
             break;
         case 0:
             break;
@@ -110,6 +174,10 @@ void menu()
             break;
         }
     } while (opcion);
+    for (int i = 0; i < columnas; i++)
+    {
+        free(matriz[i]);
+    }
     free(matriz);
 }
 
@@ -140,8 +208,8 @@ void llenar_matriz(long long **matriz, int filas, int columnas)
 void imprimir_matriz(long long **array, int filas, int columnas)
 {
     int i, j;
-    printf("\nIMPRIMIENDO MATRIZ\n");
-    printf("\n==================\n");
+    // printf("\n\nIMPRIMIENDO MATRIZ\n");
+    printf("\n##################################\n");
 
     for (i = 0; i < filas; i++)
     {
@@ -175,21 +243,21 @@ void resta_lineas(long long **matriz, int dim, int minu, int sustra, long long v
 void Triangular_SUP(long long **matriz, int filas, int columnas)
 {
     long long inv;
-    if (matriz == NULL)  // Revision si la matriz fue creada satisfactoriamente
+    if (matriz == NULL) // Revision si la matriz fue creada satisfactoriamente
     {
         printf("\nMemoria alocada incorrectamnete......");
         exit(0);
     }
     else
     {
-        for (int i = 0; i < columnas; i++)   //Ciclo que revisa columnas 
-        {                                  
-            
-            for (int j = i; j < filas - 1; j++) //Ciclo que revisa filas
-            {                                                               
-                inv = InvP(matriz[i][i]);                                   
-                cambiar_linea(matriz, columnas, i, inv);                    
-                resta_lineas(matriz, columnas, j + 1, i, matriz[j + 1][i]); 
+        for (int i = 0; i < columnas; i++) // Ciclo que revisa columnas
+        {
+
+            for (int j = i; j < filas - 1; j++) // Ciclo que revisa filas
+            {
+                inv = InvP(matriz[i][i]);
+                cambiar_linea(matriz, columnas, i, inv);
+                resta_lineas(matriz, columnas, j + 1, i, matriz[j + 1][i]);
             }
         }
         inv = InvP(matriz[filas - 1][filas - 1]);
@@ -200,8 +268,8 @@ void Triangular_SUP(long long **matriz, int filas, int columnas)
 void Triangular_INF(long long **matriz, int filas, int columnas)
 {
 
-    long long aux, inv; 
-    int cont = 0;       
+    long long aux, inv;
+    int cont = 0;
     if (matriz == NULL)
     {
         printf("\nMemoria alocada incorrectamnete......");
@@ -209,17 +277,17 @@ void Triangular_INF(long long **matriz, int filas, int columnas)
     }
     else
     {
-        for (int i = filas - 1; i > 0; i--) 
+        for (int i = filas - 1; i > 0; i--) // Ciclo que revisa columnas
         {
-            printf("  Ciclo %i", i);
-            for (int j = i; j > 0; j--) 
+
+            for (int j = i; j > 0; j--) // Ciclo que revisa filas
             {
-                inv = InvP(matriz[i][i]);                                   
-                cambiar_linea(matriz, columnas, i, inv);                    
-                resta_lineas(matriz, columnas, j - 1, i, matriz[j - 1][i]); 
+                inv = InvP(matriz[i][i]);
+                cambiar_linea(matriz, columnas, i, inv);
+                resta_lineas(matriz, columnas, j - 1, i, matriz[j - 1][i]);
             }
         }
-        inv = InvP(matriz[0][0]); 
+        inv = InvP(matriz[0][0]);
         cambiar_linea(matriz, columnas, 0, inv);
     }
 }
@@ -227,7 +295,7 @@ void Triangular_INF(long long **matriz, int filas, int columnas)
 void Eliminacion_Gaussiana(long long **matriz, int filas, int columnas)
 {
 
-    long long aux = 0, inv = 0; 
+    long long aux = 0, inv = 0;
     if (matriz == NULL)
     {
         printf("\nMemoria alocada incorrectamnete......");
@@ -235,38 +303,32 @@ void Eliminacion_Gaussiana(long long **matriz, int filas, int columnas)
     }
     else
     {
-        for (int i = 0; i < columnas; i++) 
-        {                                  
-            printf("  Ciclo %i", i);
-            for (int j = i; j < filas - 1; j++)
-            {                                                              
-                inv = InvP(matriz[i][i]);                                  
-                cambiar_linea(matriz, columnas, i, inv);                   
+        for (int i = 0; i < columnas; i++) // Ciclo que revisa columnas
+        {
+            for (int j = i; j < filas - 1; j++) // Ciclo que revisa filas
+            {
+                inv = InvP(matriz[i][i]);
+                cambiar_linea(matriz, columnas, i, inv);
                 resta_lineas(matriz, columnas, j + 1, i, matriz[j + 1][i]);
             }
         }
-        
-        for (int i = filas - 1; i > 0; i--) 
+
+        for (int i = filas - 1; i > 0; i--) // Ciclo que revisa columnas
         {
-            for (int j = i; j > 0; j--) 
+            for (int j = i; j > 0; j--) // Ciclo que revisa filas
             {
-                inv = InvP(matriz[i][i]);                                   
-                cambiar_linea(matriz, columnas, i, inv);                    
-                resta_lineas(matriz, columnas, j - 1, i, matriz[j - 1][i]); 
+                inv = InvP(matriz[i][i]);
+                cambiar_linea(matriz, columnas, i, inv);
+                resta_lineas(matriz, columnas, j - 1, i, matriz[j - 1][i]);
             }
         }
     }
-
-    printf("\nAca tambien la wea ya termino......");
-    
 }
 
-void Matriz_inversa(long long **matriz, int filas, int columnas)
+void Matriz_inversa(long long **matriz, long long **identidad, int filas, int columnas)
 {
-    
-    long long aux, inv, **identidad;
-    identidad = asignar_matriz(filas, columnas);
-    eye(identidad, filas, columnas);
+
+    long long aux, inv;
     if (matriz == NULL || identidad == NULL)
     {
         printf("\nMemoria alocada incorrectamnete......");
@@ -274,23 +336,23 @@ void Matriz_inversa(long long **matriz, int filas, int columnas)
     }
     else
     {
-        for (int i = 0; i < columnas; i++) 
-        {                                  
+        for (int i = 0; i < columnas; i++)
+        {
 
             for (int j = i; j < filas - 1; j++)
-            { 
+            {
 
-                inv = InvP(matriz[i][i]);                
-                cambiar_linea(matriz, columnas, i, inv); 
-                cambiar_linea(identidad, columnas, i, inv);
+                inv = InvP(matriz[i][i]);
+                cambiar_linea(matriz, columnas, i, inv);
+                cambiar_linea(identidad, columnas, i, inv); // Se repiten las mismas operaciones para la matriz identidad
                 resta_lineas(identidad, columnas, j + 1, i, matriz[j + 1][i]);
-                resta_lineas(matriz, columnas, j + 1, i, matriz[j + 1][i]); 
+                resta_lineas(matriz, columnas, j + 1, i, matriz[j + 1][i]); // Se siguen repitiendo las operaciones
             }
         }
-       
-        for (int i = columnas - 1; i > 0; i--) 
+
+        for (int i = columnas - 1; i > 0; i--)
         {
-            for (int j = i; j > 0; j--) 
+            for (int j = i; j > 0; j--)
             {
 
                 inv = InvP(matriz[i][i]);
@@ -298,15 +360,12 @@ void Matriz_inversa(long long **matriz, int filas, int columnas)
                 cambiar_linea(identidad, columnas, i, inv);
                 resta_lineas(identidad, columnas, j - 1, i, matriz[j - 1][i]);
                 resta_lineas(matriz, columnas, j - 1, i, matriz[j - 1][i]);
-                
             }
         }
-        //printf("\n\nLa matriz inversa es: \n");
-        
-        free(identidad);
     }
 }
 
+// LLena una matriz diagonal 
 void eye(long long **matriz, int fila, int columnas)
 {
     for (int i = 0; i < fila; i++)
@@ -315,6 +374,7 @@ void eye(long long **matriz, int fila, int columnas)
     }
 }
 
+// Funciones entregadas para los calculos en mod p.
 long long InvP(long long A)
 {
     long long a, b, s1, s2, r, u;
@@ -394,7 +454,7 @@ long long SumaP(long long a, long long b)
     }
 }
 
-long long MultP(long long a, long long b) //???
+long long MultP(long long a, long long b)
 {
     long long a0, a1, b0, b1, d0, d1, d2, d3;
     long long c;
