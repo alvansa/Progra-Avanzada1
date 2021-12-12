@@ -508,3 +508,6 @@ long long RestaP(long long a, long long b)
         return (a - b);
     }
 }
+
+
+//resulto esta wea?
